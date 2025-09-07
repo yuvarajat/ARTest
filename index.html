@@ -22,7 +22,7 @@
   }
 </style>
 
-<body style="margin: 0px; overflow: hidden">
+<body style="margin : 0px; overflow: hidden;">
   <!-- minimal loader shown until image descriptors are loaded -->
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
@@ -33,21 +33,56 @@
     embedded
     arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
   >
+
+    <a-assets>
+            <video src="mov_bbb.mp4"
+                preload="auto" id="vid" response-type="arraybuffer" loop
+                crossorigin webkit-playsinline autoplay muted playsinline>
+            </video>
+        </a-assets>
+
     <a-nft
       type="nft"
-      url="https://yuvarajat.github.io/ARTest/yuvaraja"
+      url="surya/surya"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
       smoothThreshold="5"
     >
-      <a-entity
-        gltf-model="https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-        scale="5 5 5"
-        position="50 150 0"
-      >
-      </a-entity>
+      <a-video
+            id="dynamic-video"
+            src="#vid"
+            position='0 0 0'
+            rotation='-90 0 0'
+            >
+        </a-video>
     </a-nft>
     <a-entity camera></a-entity>
   </a-scene>
+
+<script>
+const fsetUrl = 'surya/surya.fset';
+
+fetch(fsetUrl)
+  .then(response => response.arrayBuffer())
+  .then(buffer => {
+    const dataView = new DataView(buffer);
+    const width = dataView.getFloat32(0, true);
+    let height = dataView.getFloat32(4, true);
+    if (height === 0) height = width; // fallback for square markers
+
+    console.log(`Width: ${width} meters, Height: ${height} meters`);
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoEl = document.querySelector('#dynamic-video');
+      if (videoEl) {
+        videoEl.setAttribute('width', width);
+        videoEl.setAttribute('height', height);
+      }
+    });
+  })
+  .catch(err => {
+    console.error('Failed to load or parse .fset file:', err);
+  });
+</script>
+
 </body>
