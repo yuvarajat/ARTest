@@ -43,46 +43,21 @@
 
     <a-nft
       type="nft"
-      url="surya/surya"
+      url="https://yuvarajat.github.io/ARTest/surya/surya"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
       smoothThreshold="5"
     >
       <a-video
-            id="dynamic-video"
-            src="#vid"
-            position='0 0 0'
-            rotation='-90 0 0'
-            >
-        </a-video>
+                src="#vid"
+                position='0 0 0.1'
+                rotation='-90 0 0'
+                width='300'
+                height='175'
+                >
+            </a-video>
     </a-nft>
     <a-entity camera></a-entity>
   </a-scene>
-
-<script>
-const fsetUrl = 'surya/surya.fset';
-
-fetch(fsetUrl)
-  .then(response => response.arrayBuffer())
-  .then(buffer => {
-    const dataView = new DataView(buffer);
-    const width = dataView.getFloat32(0, true);
-    let height = dataView.getFloat32(4, true);
-    if (height === 0) height = width; // fallback for square markers
-
-    console.log(`Width: ${width} meters, Height: ${height} meters`);
-    document.addEventListener('DOMContentLoaded', () => {
-      const videoEl = document.querySelector('#dynamic-video');
-      if (videoEl) {
-        videoEl.setAttribute('width', width);
-        videoEl.setAttribute('height', height);
-      }
-    });
-  })
-  .catch(err => {
-    console.error('Failed to load or parse .fset file:', err);
-  });
-</script>
-
 </body>
